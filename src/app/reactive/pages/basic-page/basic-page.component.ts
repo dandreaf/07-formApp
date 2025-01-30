@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 
 const rtx5090 = {
   name: 'RXT 5090',
@@ -15,15 +15,15 @@ const rtx5090 = {
 })
 export class BasicPageComponent implements OnInit {
 
-  public myForm!: FormGroup;
+  private fb: NonNullableFormBuilder = new FormBuilder().nonNullable;
 
-  constructor( private fb: FormBuilder ) {
-    this.myForm = this.fb.group({
-      name: ['', [ Validators.required, Validators.minLength(3) ] ],
-      price: [0, [ Validators.required, Validators.min(0)] ],
-      inStorage: [0, [ Validators.required, Validators.min(0)] ],
-    });
-  };
+  public myForm: FormGroup = this.fb.group({
+    name: ['', [ Validators.required, Validators.minLength(3) ] ],
+    price: [0, [ Validators.required, Validators.min(0)] ],
+    inStorage: [0, [ Validators.required, Validators.min(0)] ],
+  });;
+
+  constructor() { };
 
   ngOnInit(): void {
     //this.myForm.reset(rtx5090)

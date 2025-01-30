@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormControl, NonNullableFormBuilder } from '@angular/forms';
 
 @Component({
   standalone: false,
@@ -9,19 +9,19 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 })
 export class DynamicPageComponent {
 
-  public myForm! : FormGroup;
+  private fb: NonNullableFormBuilder = new FormBuilder().nonNullable;
+
+  public myForm: FormGroup = this.fb.group({
+    name: ['', [ Validators.required, Validators.minLength(3)] ],
+    favoriteGames: this.fb.array([
+      ['Metal Gear', Validators.required],
+      ['Death Stranding', Validators.required],
+    ]),
+  });
+
   public newFavorite: FormControl = new FormControl( '', Validators.required )
 
-  constructor( private fb: FormBuilder )
-  {
-    this.myForm = this.fb.group({
-      name: ['', [ Validators.required, Validators.minLength(3)] ],
-      favoriteGames: this.fb.array([
-        ['Metal Gear', Validators.required],
-        ['Death Stranding', Validators.required],
-      ]),
-    });
-  };
+  constructor(  ) { };
 
   get favoriteGames(){
     return this.myForm.get('favoriteGames') as FormArray;
